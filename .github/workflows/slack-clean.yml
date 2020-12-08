@@ -1,0 +1,106 @@
+name: slack-clean
+
+on:
+  schedule:
+    - cron: 0 0,12 * * *
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set-env
+        run: |
+          echo FIVE_DAYS_AGO=$(date -d '-5 days' '+%Y%m%d') >> $GITHUB_ENV
+          echo THREE_DAYS_AGO=$(date -d '-3 days' '+%Y%m%d') >> $GITHUB_ENV
+          echo TWO_DAYS_AGO=$(date -d '-2 days' '+%Y%m%d') >> $GITHUB_ENV
+          echo ONE_DAY_AGO=$(date -d '-1 days' '+%Y%m%d') >> $GITHUB_ENV
+      - name: clean downloads channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: downloads
+          before: ${{ env.FIVE_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean errors channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: errors
+          before: ${{ env.FIVE_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean msf-errors channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: msf-errors
+          before: ${{ env.THREE_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean info channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: info
+          before: ${{ env.TWO_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean debug channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: debug
+          before: ${{ env.THREE_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean dev channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          channel: dev
+          before: ${{ env.FIVE_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean staging channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: staging
+          before: ${{ env.ONE_DAY_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean audio channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: audio-downloads
+          before: ${{ env.ONE_DAY_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
+      - name: clean spendable channel
+        uses: matken11235/slack-cleaner@v1
+        with:
+          group: spendable
+          before: ${{ env.FIVE_DAYS_AGO }}
+          rate: '1'
+          message: true
+          bot: true
+          perform: true
+          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
