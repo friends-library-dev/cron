@@ -1,0 +1,25 @@
+name: print-jobs
+
+on:
+  schedule:
+    - cron: 0 * * * *
+
+env:
+  DOCUMENT_META_AUTH_TOKEN: ${{ secrets.DOCUMENT_META_AUTH_TOKEN }}
+  DOCUMENT_META_GIST_ID: ${{ secrets.DOCUMENT_META_GIST_ID }}
+  DOCUMENT_META_GIST_FILENAME: ${{ secrets.DOCUMENT_META_GIST_FILENAME }}
+  SLACK_API_TOKEN: ${{ secrets.SLACK_TOKEN_WORKSPACE_MAIN }}
+
+jobs:
+  print_jobs:
+    name: process-print-jobs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: friends-library-dev/action-ts-pack/actions/print-jobs@master
+        with:
+          lulu_client_key: ${{ secrets.PROD_LULU_CLIENT_KEY }}
+          lulu_client_secret: ${{ secrets.PROD_LULU_CLIENT_SECRET }}
+          lulu_is_sandbox: false
+          fauna_server_secret: ${{ secrets.PROD_FAUNA_SERVER_SECRET }}
+          cloud_storage_bucket_url: ${{ secrets.CLOUD_STORAGE_BUCKET_URL }}
