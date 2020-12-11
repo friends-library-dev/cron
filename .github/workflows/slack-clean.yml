@@ -54,16 +54,6 @@ jobs:
           bot: true
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
-      - name: clean debug channel
-        uses: matken11235/slack-cleaner@v1
-        with:
-          group: debug
-          before: ${{ env.THREE_DAYS_AGO }}
-          rate: '1'
-          message: true
-          bot: true
-          perform: true
-          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean dev channel
         uses: matken11235/slack-cleaner@v1
         with:
@@ -78,16 +68,6 @@ jobs:
         uses: matken11235/slack-cleaner@v1
         with:
           group: staging
-          before: ${{ env.ONE_DAY_AGO }}
-          rate: '1'
-          message: true
-          bot: true
-          perform: true
-          token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
-      - name: clean audio channel
-        uses: matken11235/slack-cleaner@v1
-        with:
-          group: audio-downloads
           before: ${{ env.ONE_DAY_AGO }}
           rate: '1'
           message: true
