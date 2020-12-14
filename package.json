@@ -1,0 +1,9 @@
+{
+  "name": "@friends-library/cron",
+  "version": "1.0.0",
+  "description": "cron-ish tasks run by github actions",
+  "repository": "github:friends-library-dev/cron",
+  "author": "Jared Henderson <jared@netrivet.com>",
+  "private": true,
+  "license": "MIT"
+}
