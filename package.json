@@ -5,5 +5,8 @@
   "repository": "github:friends-library-dev/cron",
   "author": "Jared Henderson <jared@netrivet.com>",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "compile": "true"
+  }
 }
