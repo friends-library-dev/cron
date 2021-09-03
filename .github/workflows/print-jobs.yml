@@ -22,5 +22,6 @@ jobs:
           lulu_client_key: ${{ secrets.PROD_LULU_CLIENT_KEY }}
           lulu_client_secret: ${{ secrets.PROD_LULU_CLIENT_SECRET }}
           lulu_is_sandbox: false
-          fauna_server_secret: ${{ secrets.PROD_FAUNA_SERVER_SECRET }}
+          flp_api_token: ${{ secrets.PROD_PRINT_JOBS_ACTION_FLP_API_TOKEN }}
+          flp_api_endpoint: ${{ secrets.PROD_PRINT_JOBS_ACTION_FLP_API_ENDPOINT }}
           cloud_storage_bucket_url: ${{ secrets.CLOUD_STORAGE_BUCKET_URL }}
