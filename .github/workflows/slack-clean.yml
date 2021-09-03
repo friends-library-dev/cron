@@ -1,8 +1,10 @@
 name: slack-clean
 
 on:
-  schedule:
-    - cron: 0 0,12 * * *
+  - push
+
+  # schedule:
+  # - cron: 0 0,12 * * *
 
 jobs:
   clean:
@@ -15,7 +17,7 @@ jobs:
           echo TWO_DAYS_AGO=$(date -d '-2 days' '+%Y%m%d') >> $GITHUB_ENV
           echo ONE_DAY_AGO=$(date -d '-1 days' '+%Y%m%d') >> $GITHUB_ENV
       - name: clean downloads channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           group: downloads
           before: ${{ env.FIVE_DAYS_AGO }}
@@ -25,7 +27,7 @@ jobs:
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean errors channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           group: errors
           before: ${{ env.FIVE_DAYS_AGO }}
@@ -35,7 +37,7 @@ jobs:
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean msf-errors channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           group: msf-errors
           before: ${{ env.THREE_DAYS_AGO }}
@@ -45,7 +47,7 @@ jobs:
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean info channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           group: info
           before: ${{ env.TWO_DAYS_AGO }}
@@ -55,7 +57,7 @@ jobs:
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean dev channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           channel: dev
           before: ${{ env.FIVE_DAYS_AGO }}
@@ -65,7 +67,7 @@ jobs:
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean staging channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           group: staging
           before: ${{ env.ONE_DAY_AGO }}
@@ -75,7 +77,7 @@ jobs:
           perform: true
           token: ${{ secrets.SLACK_CLEANER_TOKEN_WORKSPACE_MAIN }}
       - name: clean spendable channel
-        uses: matken11235/slack-cleaner@v1
+        uses: jaredh159/slack-cleaner@v2.0.0
         with:
           group: spendable
           before: ${{ env.FIVE_DAYS_AGO }}
