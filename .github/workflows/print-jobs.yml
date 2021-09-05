@@ -1,8 +1,9 @@
 name: print-jobs
 
 on:
-  schedule:
-    - cron: 0 * * * *
+  - push
+  # schedule:
+  #   - cron: 0 * * * *
 
 env:
   DOCUMENT_META_AUTH_TOKEN: ${{ secrets.DOCUMENT_META_AUTH_TOKEN }}
@@ -17,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: friends-library-dev/action-ts-pack/actions/print-jobs@master
+      - uses: friends-library-dev/action-ts-pack/actions/print-jobs@60e37356f85d0447b2855400ab3ebcec09522c42
         with:
           lulu_client_key: ${{ secrets.PROD_LULU_CLIENT_KEY }}
           lulu_client_secret: ${{ secrets.PROD_LULU_CLIENT_SECRET }}
