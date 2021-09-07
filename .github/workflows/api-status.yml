@@ -2,7 +2,7 @@ name: api-status
 
 on:
   schedule:
-    - cron: 15/30 * * * *
+    - cron: 15/45 * * * *
 
 env:
   SLACK_API_TOKEN_WORKSPACE_MAIN: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}
