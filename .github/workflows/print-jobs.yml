@@ -16,7 +16,7 @@ jobs:
     name: process-print-jobs
     runs-on: ubuntu-latest
     steps:
-      - uses: friends-library-dev/action-ts-pack/actions/print-jobs@master
+      - uses: friends-library-dev/action-ts-pack/actions/print-jobs@gh-action
         with:
           lulu_client_key: ${{ secrets.PROD_LULU_CLIENT_KEY }}
           lulu_client_secret: ${{ secrets.PROD_LULU_CLIENT_SECRET }}
