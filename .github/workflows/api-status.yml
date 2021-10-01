@@ -13,7 +13,6 @@ jobs:
     name: check-api-statuses
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: friends-library-dev/action-ts-pack/actions/api-status@master
         with:
           flp_api_status_query_token: ${{ secrets.FLP_API_STATUS_QUERY_TOKEN }}
