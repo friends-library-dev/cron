@@ -9,7 +9,7 @@ env:
   SLACK_API_TOKEN_WORKSPACE_BOT: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_BOT }}
 
 jobs:
-  print_jobs:
+  check_api_statuses:
     name: check-api-statuses
     runs-on: ubuntu-latest
     steps:

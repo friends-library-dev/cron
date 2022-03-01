@@ -1,0 +1,38 @@
+name: auto-republish-evans
+
+# on:
+#   schedule:
+#     - cron: 0/30 * * * *
+on: push
+
+env:
+  SLACK_API_TOKEN_WORKSPACE_MAIN: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}
+  SLACK_API_TOKEN_WORKSPACE_BOT: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_BOT }}
+  CLOUD_STORAGE_BUCKET_URL: ${{ secrets.CLOUD_STORAGE_BUCKET_URL }}
+  CLOUD_STORAGE_BUCKET: ${{ secrets.CLOUD_STORAGE_BUCKET }}
+  CLOUD_STORAGE_ENDPOINT: ${{ secrets.CLOUD_STORAGE_ENDPOINT }}
+  CLOUD_STORAGE_KEY: ${{ secrets.CLOUD_STORAGE_KEY }}
+  CLOUD_STORAGE_SECRET: ${{ secrets.CLOUD_STORAGE_SECRET }}
+
+jobs:
+  check_should_republish:
+    name: check-should-republish
+    runs-on: ubuntu-latest
+    outputs:
+      should_republish: ${{ steps.check.outputs.should_republish }}
+    steps:
+      - name: check
+        id: check
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@9622a93
+        with:
+          flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
+          flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
+
+  republish_en:
+    needs: check_should_republish
+    name: republish-en
+    runs-on: ubuntu-latest
+    if: needs.check_should_republish.outputs.should_republish == 'true'
+    steps:
+      - name: debug
+        run: echo i will deploy here, son
