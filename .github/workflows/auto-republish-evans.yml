@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: check
         id: check
-        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@9622a93
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@9622a93553e3e13c53ee2dcf8641b088e59a9e6b
         with:
           flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
           flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
