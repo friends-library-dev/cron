@@ -6,16 +6,12 @@ name: auto-republish-evans
 on: push
 
 env:
-  # CLOUD_STORAGE_BUCKET_URL: ${{ secrets.CLOUD_STORAGE_BUCKET_URL }}
   GATSBY_ALGOLIA_APP_ID: ${{ secrets.GATSBY_ALGOLIA_APP_ID }}
   ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
-  # FLP_API_TOKEN_STAGING: ${{ secrets.FLP_API_TOKEN_STAGING }}
   FLP_API_TOKEN_PROD: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
   GATSBY_ALGOLIA_SEARCH_ONLY_KEY: ${{ secrets.GATSBY_ALGOLIA_SEARCH_ONLY_KEY }}
-  # GATSBY_TEST_STRIPE_PUBLISHABLE_KEY: ${{ secrets.GATSBY_TEST_STRIPE_PUBLISHABLE_KEY }}
   GATSBY_PROD_STRIPE_PUBLISHABLE_KEY: ${{ secrets.GATSBY_PROD_STRIPE_PUBLISHABLE_KEY }}
   GATSBY_FLP_API_ENDPOINT_PROD: ${{ secrets.GATSBY_FLP_API_ENDPOINT_PROD }}
-  # GATSBY_FLP_API_ENDPOINT_STAGING: ${{ secrets.GATSBY_FLP_API_ENDPOINT_STAGING }}
   DOCS_REPOS_ROOT: ${{ github.workspace }}/evans
   DEPLOYING: true
   GATSBY_NETLIFY_CONTEXT: 'production'
@@ -48,12 +44,57 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check_should_republish.outputs.should_republish == 'true'
     steps:
-      - name: echo
-        run: echo DEPLOY EN HERE
-      - name: echo2
-        run: echo OUTPUT ${{ needs.check_should_republish.outputs.should_republish }}
-      - name: should-fail
-        run: exit 1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/checkout@v2
+        with:
+          repository: friends-library-dev/evans
+          path: evans
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: evans
+      - name: clone-friend-repos
+        run: cd evans && npx friend-repos-clone-all .
+      - name: build:en
+        run: cd evans && npm run build:en
+      - name: deploy
+        id: deploy
+        uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
+        with:
+          netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
+          site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
+          build_dir: evans/public
+          github_token: ${{ github.token }}
+
+  republish_es:
+    name: republish-es
+    needs: check_should_republish
+    runs-on: ubuntu-latest
+    if: needs.check_should_republish.outputs.should_republish == 'true'
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/checkout@v2
+        with:
+          repository: friends-library-dev/evans
+          path: evans
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: evans
+      - name: clone-friend-repos
+        run: cd evans && npx friend-repos-clone-all .
+      - name: build:es
+        run: cd evans && npm run build:es
+      - name: deploy
+        id: deploy
+        uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
+        with:
+          netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
+          site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
+          build_dir: evans/public
+          github_token: ${{ github.token }}
 
   skip_republish:
     name: skip-republish
@@ -61,54 +102,57 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check_should_republish.outputs.should_republish != 'true'
     steps:
-      - name: echo
-        run: echo DO NOT DEPLOY HERE
-      - name: echo2
-        run: echo OUTPUT ${{ needs.check_should_republish.outputs.should_republish }}
-      - name: should-fail
-        run: exit 1
+      - name: slack-on-skip-republish
+        uses: archive/github-actions-slack@v2.0.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_BOT }}
+          slack-channel: C01G2V6U0KZ #debug
+          slack-text: No auto-republish necessary for FLP websites
 
   on_fail:
     name: on-fail
-    needs: skip_republish
-    # if: always() && needs.skip_republish.result == 'failure'
-    if: failure()
+    needs:
+      - check_should_republish
+      - republish_es
+      - republish_en
+    if:
+      always() && (needs.republish_en.result == 'failure' || needs.republish_es .result ==
+      'failure')
     runs-on: ubuntu-latest
     steps:
-      - name: say-something
-        run: echo FAILURE RAN
+      - name: set-empty-build-data
+        run: echo "[]" >> ./data.json
+      - name: upload-empty-build-data
+        uses: friends-library-dev/action-do-spaces-upload@master
+        with:
+          acl: public-read
+          src-file-path: ./data.json
+          destination-object-key:
+            ${{ needs.check_should_republish.outputs.build_data_cloud_filepath }}
+          access-key-id: ${{ secrets.CLOUD_STORAGE_KEY }}
+          access-key-secret: ${{ secrets.CLOUD_STORAGE_SECRET }}
+          bucket: ${{ secrets.CLOUD_STORAGE_BUCKET }}
+          region: ${{ secrets.CLOUD_STORAGE_REGION }}
+      - name: slack-on-republish-fail
+        uses: archive/github-actions-slack@v2.0.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}
+          slack-channel: G6007H2NM #errors
+          slack-text:
+            Error auto-republishing FLP websites! Check
+            <https://github.com/friends-library-dev/cron/actions|cron actions> for more
+            info.
 
   on_succeed:
     name: on-succeed
-    needs: skip_republish
+    needs:
+      - republish_es
+      - republish_en
     runs-on: ubuntu-latest
     steps:
-      - name: say-something
-        run: echo SUCCEED RAN
-
-  # republish_en:
-  #   name: republish-en
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14'
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         repository: friends-library-dev/evans
-  #         path: evans
-  #     - uses: bahmutov/npm-install@v1
-  #       with:
-  #         working-directory: evans
-  #     - name: clone-friend-repos
-  #       run: cd evans && npx friend-repos-clone-all .
-  #     - name: build:en
-  #       run: cd evans && npm run build:en
-  #     - name: deploy
-  #       id: deploy
-  #       uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
-  #       with:
-  #         netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
-  #         site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
-  #         build_dir: evans/public
-  #         github_token: ${{ github.token }}
+      - name: slack-on-republish-success
+        uses: archive/github-actions-slack@v2.0.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}
+          slack-channel: G013VJRTE2K #info
+          slack-text: Successfully auto-republished FLP websites
