@@ -52,6 +52,8 @@ jobs:
         run: echo DEPLOY EN HERE
       - name: echo2
         run: echo OUTPUT ${{ needs.check_should_republish.outputs.should_republish }}
+      - name: should-fail
+        run: exit 1
 
   skip_republish:
     name: skip-republish
@@ -63,6 +65,23 @@ jobs:
         run: echo DO NOT DEPLOY HERE
       - name: echo2
         run: echo OUTPUT ${{ needs.check_should_republish.outputs.should_republish }}
+      - name: should-fail
+        run: exit 1
+
+  on_fail:
+    name: on-fail
+    needs: republish-en
+    if: failure()
+    steps:
+      - name: say-something
+        run: echo FAILURE RAN
+
+  on_succeed:
+    name: on-succeed
+    needs: republish-en
+    steps:
+      - name: say-something
+        run: echo SUCCEED RAN
 
   # republish_en:
   #   name: republish-en
