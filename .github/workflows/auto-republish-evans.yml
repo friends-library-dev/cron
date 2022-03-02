@@ -45,7 +45,7 @@ jobs:
     name: republish-en
     needs: check_should_republish
     runs-on: ubuntu-latest
-    if: needs.check_should_republish.outputs.should_republish == true
+    if: needs.check_should_republish.outputs.should_republish == 'true'
     steps:
       - name: echo
         run: echo DEPLOY EN HERE
@@ -54,7 +54,7 @@ jobs:
     name: skip-republish
     needs: check_should_republish
     runs-on: ubuntu-latest
-    if: needs.check_should_republish.outputs.should_republish != true
+    if: needs.check_should_republish.outputs.should_republish != 'true'
     steps:
       - name: echo
         run: echo DO NOT DEPLOY HERE
