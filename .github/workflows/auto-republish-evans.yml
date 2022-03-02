@@ -1,9 +1,8 @@
 name: auto-republish-evans
 
-# on:
-#   schedule:
-#     - cron: 0/30 * * * *
-on: push
+on:
+  schedule:
+    - cron: 0/30 * * * *
 
 env:
   GATSBY_ALGOLIA_APP_ID: ${{ secrets.GATSBY_ALGOLIA_APP_ID }}
@@ -33,7 +32,7 @@ jobs:
     steps:
       - name: check
         id: check
-        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@a94ca62b63052ca5221b72ad4e64a2b5102b182d
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@master
         with:
           flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
           flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
@@ -60,7 +59,7 @@ jobs:
         run: cd evans && npm run build:en
       - name: deploy
         id: deploy
-        uses: friends-library-dev/action-ts-pack/actions/deploy@a94ca62b63052ca5221b72ad4e64a2b5102b182d
+        uses: friends-library-dev/action-ts-pack/actions/deploy@master
         with:
           netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
           site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
@@ -89,7 +88,7 @@ jobs:
         run: cd evans && npm run build:es
       - name: deploy
         id: deploy
-        uses: friends-library-dev/action-ts-pack/actions/deploy@a94ca62b63052ca5221b72ad4e64a2b5102b182d
+        uses: friends-library-dev/action-ts-pack/actions/deploy@master
         with:
           netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
           site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
@@ -109,7 +108,6 @@ jobs:
           slack-channel: C01G2V6U0KZ #debug
           slack-text: No auto-republish necessary for FLP websites
           slack-optional-icon_emoji: robot_face
-          # slack-optional-as_user: false
           slack-optional-username: FLP Bot
 
   on_fail:
@@ -141,6 +139,8 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}
           slack-channel: G6007H2NM #errors
+          slack-optional-icon_emoji: robot_face
+          slack-optional-username: FLP Bot
           slack-text:
             Error auto-republishing FLP websites! Check
             <https://github.com/friends-library-dev/cron/actions|cron actions> for more
@@ -158,4 +158,6 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}
           slack-channel: G013VJRTE2K #info
+          slack-optional-icon_emoji: robot_face
+          slack-optional-username: FLP Bot
           slack-text: Successfully auto-republished FLP websites
