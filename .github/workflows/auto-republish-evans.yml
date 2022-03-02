@@ -70,7 +70,7 @@ jobs:
 
   on_fail:
     name: on-fail
-    needs: republish-en
+    needs: republish_en
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -79,7 +79,7 @@ jobs:
 
   on_succeed:
     name: on-succeed
-    needs: republish-en
+    needs: republish_en
     runs-on: ubuntu-latest
     steps:
       - name: say-something
