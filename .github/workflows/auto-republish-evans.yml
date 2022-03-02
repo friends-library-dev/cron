@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: check
         id: check
-        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@f928b2656f5e1520ebb06c2f48f9ba08469cbc4f
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@04d36a3ae391dca534e8b7a43b178ccccf7e1d7b
         with:
           flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
           flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
