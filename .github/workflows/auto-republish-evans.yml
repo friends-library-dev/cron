@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: check
         id: check
-        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@04d36a3ae391dca534e8b7a43b178ccccf7e1d7b
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@a94ca62b63052ca5221b72ad4e64a2b5102b182d
         with:
           flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
           flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
@@ -60,7 +60,7 @@ jobs:
         run: cd evans && npm run build:en
       - name: deploy
         id: deploy
-        uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
+        uses: friends-library-dev/action-ts-pack/actions/deploy@a94ca62b63052ca5221b72ad4e64a2b5102b182d
         with:
           netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
           site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
@@ -89,7 +89,7 @@ jobs:
         run: cd evans && npm run build:es
       - name: deploy
         id: deploy
-        uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
+        uses: friends-library-dev/action-ts-pack/actions/deploy@a94ca62b63052ca5221b72ad4e64a2b5102b182d
         with:
           netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
           site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
@@ -109,8 +109,8 @@ jobs:
           slack-channel: C01G2V6U0KZ #debug
           slack-text: No auto-republish necessary for FLP websites
           slack-optional-icon_emoji: robot_face
-          slack-optional-as_user: false
-          slack-optional-username: FLP Bot
+          # slack-optional-as_user: false
+          # slack-optional-username: FLP Bot
 
   on_fail:
     name: on-fail
