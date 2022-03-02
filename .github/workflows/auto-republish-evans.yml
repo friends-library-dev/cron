@@ -108,6 +108,9 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_BOT }}
           slack-channel: C01G2V6U0KZ #debug
           slack-text: No auto-republish necessary for FLP websites
+          slack-optional-icon_emoji: robot_face
+          slack-optional-as_user: false
+          slack-optional-username: FLP Bot
 
   on_fail:
     name: on-fail
