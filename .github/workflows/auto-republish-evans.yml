@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: check
         id: check
-        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@72c1ef28125fc20d109572f39070f549d043d0cf
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@76f9f539edf0c8399512740f56c2dc2e64d3fd26
         with:
           flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
           flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
@@ -49,6 +49,8 @@ jobs:
     steps:
       - name: echo
         run: echo DEPLOY EN HERE
+      - name: echo2
+        run: echo OUTPUT ${{ needs.check_should_republish.outputs.should_republish }}
 
   skip_republish:
     name: skip-republish
@@ -58,6 +60,8 @@ jobs:
     steps:
       - name: echo
         run: echo DO NOT DEPLOY HERE
+      - name: echo2
+        run: echo OUTPUT ${{ needs.check_should_republish.outputs.should_republish }}
 
   # republish_en:
   #   name: republish-en
