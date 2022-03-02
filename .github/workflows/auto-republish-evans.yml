@@ -72,6 +72,7 @@ jobs:
     name: on-fail
     needs: republish-en
     if: failure()
+    runs-on: ubuntu-latest
     steps:
       - name: say-something
         run: echo FAILURE RAN
@@ -79,6 +80,7 @@ jobs:
   on_succeed:
     name: on-succeed
     needs: republish-en
+    runs-on: ubuntu-latest
     steps:
       - name: say-something
         run: echo SUCCEED RAN
