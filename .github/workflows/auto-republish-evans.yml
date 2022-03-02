@@ -28,42 +28,60 @@ env:
   # CLOUD_STORAGE_SECRET: ${{ secrets.CLOUD_STORAGE_SECRET }}
 
 jobs:
-  # check_should_republish:
-  #   name: check-should-republish
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     should_republish: ${{ steps.check.outputs.should_republish }}
-  #   steps:
-  #     - name: check
-  #       id: check
-  #       uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@69aa54099ad0dc871cdebff45356e218848ed5fa
-  #       with:
-  #         flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
-  #         flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
+  check_should_republish:
+    name: check-should-republish
+    runs-on: ubuntu-latest
+    outputs:
+      should_republish: ${{ steps.check.outputs.should_republish }}
+    steps:
+      - name: check
+        id: check
+        uses: friends-library-dev/action-ts-pack/actions/should-republish-evans@84bb0786bc3556db177bde75767e944f794d44e9
+        with:
+          flp_api_token: ${{ secrets.FLP_API_AUTO_REPUBLISH_EVANS_TOKEN }}
+          flp_api_endpoint: ${{ secrets.FLP_API_ENDPOINT_PROD }}
 
   republish_en:
     name: republish-en
+    needs: check-should-republish
     runs-on: ubuntu-latest
+    if: needs.check-should-republish.outputs.should_republish == true
     steps:
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - uses: actions/checkout@v2
-        with:
-          repository: friends-library-dev/evans
-          path: evans
-      - uses: bahmutov/npm-install@v1
-        with:
-          working-directory: evans
-      - name: clone-friend-repos
-        run: cd evans && npx friend-repos-clone-all .
-      - name: build:en
-        run: cd evans && npm run build:en
-      - name: deploy
-        id: deploy
-        uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
-        with:
-          netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
-          site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
-          build_dir: evans/public
-          github_token: ${{ github.token }}
+      - name: echo
+        run: echo DEPLOY EN HERE
+
+  skip_republish:
+    name: skip-republish
+    needs: check-should-republish
+    runs-on: ubuntu-latest
+    if: needs.check-should-republish.outputs.should_republish != true
+    steps:
+      - name: echo
+        run: echo DO NOT DEPLOY HERE
+
+  # republish_en:
+  #   name: republish-en
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: '14'
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         repository: friends-library-dev/evans
+  #         path: evans
+  #     - uses: bahmutov/npm-install@v1
+  #       with:
+  #         working-directory: evans
+  #     - name: clone-friend-repos
+  #       run: cd evans && npx friend-repos-clone-all .
+  #     - name: build:en
+  #       run: cd evans && npm run build:en
+  #     - name: deploy
+  #       id: deploy
+  #       uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
+  #       with:
+  #         netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
+  #         site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
+  #         build_dir: evans/public
+  #         github_token: ${{ github.token }}
