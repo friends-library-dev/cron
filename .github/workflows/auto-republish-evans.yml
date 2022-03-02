@@ -61,7 +61,7 @@ jobs:
         run: cd evans && npm run build:en
       - name: deploy
         id: deploy
-        uses: friends-library-dev/action-ts-pack/actions/deploy@master
+        uses: friends-library-dev/action-ts-pack/actions/deploy@651ed81c0b83529cac93ffeeaa43a39ec49c5104
         with:
           netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
           site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
