@@ -71,7 +71,7 @@ jobs:
   on_fail:
     name: on-fail
     needs: republish_en
-    if: failure()
+    if: always() && needs.republish_en.result == 'failure'
     runs-on: ubuntu-latest
     steps:
       - name: say-something
