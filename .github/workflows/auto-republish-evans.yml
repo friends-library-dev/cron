@@ -91,7 +91,7 @@ jobs:
         uses: friends-library-dev/action-ts-pack/actions/deploy@master
         with:
           netlify_api_token: ${{ secrets.NETLIFY_API_TOKEN }}
-          site_id: ${{ secrets.DEPLOY_SITE_ID_EN }}
+          site_id: ${{ secrets.DEPLOY_SITE_ID_ES }}
           build_dir: evans/public
           github_token: ${{ github.token }}
 
