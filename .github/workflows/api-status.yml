@@ -1,8 +1,13 @@
 name: api-status
 
 on:
-  schedule:
-    - cron: 15/45 * * * *
+  push:
+    branches:
+      - dont-run-for-now
+
+# on:
+#   schedule:
+#     - cron: 15/45 * * * *
 
 env:
   SLACK_API_TOKEN_WORKSPACE_MAIN: ${{ secrets.SLACK_API_TOKEN_WORKSPACE_MAIN }}

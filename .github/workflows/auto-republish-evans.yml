@@ -1,8 +1,13 @@
 name: auto-republish-evans
 
 on:
-  schedule:
-    - cron: 0/30 * * * *
+  push:
+    branches:
+      - dont-run-for-now
+
+# on:
+#   schedule:
+#     - cron: 0/30 * * * *
 
 env:
   GATSBY_ALGOLIA_APP_ID: ${{ secrets.GATSBY_ALGOLIA_APP_ID }}

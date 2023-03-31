@@ -1,8 +1,13 @@
 name: slack-clean
 
 on:
-  schedule:
-    - cron: 0 0,12 * * *
+  push:
+    branches:
+      - dont-run-for-now
+
+# on:
+#   schedule:
+#     - cron: 0 0,12 * * *
 
 jobs:
   clean:
